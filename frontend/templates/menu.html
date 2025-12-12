@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 style="text-align:center; margin: 30px 0;">Menümüz</h2>
+
+{% if not menu_loaded %}
+  <p style="text-align:center; color:#b00;">
+    Menü yüklenemedi. (ai/menu.py import edilemedi – terminalde MENU import error var mı bak)
+  </p>
+{% endif %}
+
+<!-- AI Assistant (Menu Page) -->
+<section class="ai-section">
+  <h3 class="ai-title">AI Menu Assistant</h3>
+
+  <div class="ai-box">
+    <p class="ai-hint">
+      Try: <b>"Recommend me something vegan"</b> / <b>"Sugar-free coffee"</b> / <b>"Low calorie tea"</b>
+    </p>
+
+    <div class="ai-row">
+      <input
+        id="aiInput"
+        class="ai-input"
+        type="text"
+        placeholder="e.g. recommend me something vegan"
+      />
+      <button id="aiBtn" class="btn ai-btn" type="button">Recommend</button>
+    </div>
+
+    <p id="aiInfo" class="ai-info"></p>
+  </div>
+
+  <div id="aiResults" class="ai-results"></div>
+</section>
+
+<!-- Filters -->
+<div style="text-align:center; margin-bottom: 24px;">
+  <button class="filter-btn active" onclick="filterSelection('all')">Tümü</button>
+  <button class="filter-btn" onclick="filterSelection('coffee')">Kahveler</button>
+  <button class="filter-btn" onclick="filterSelection('sweet')">Tatlılar</button>
+  <button class="filter-btn" onclick="filterSelection('tea')">Çaylar</button>
+</div>
+
+<!-- Menu cards -->
+<div class="menu-grid">
+  {% for item in items %}
+  <div class="menu-card filter-item" data-category="{{ item.category }}">
+    {% if item.img %}
+      <img
+        src="{{ url_for('static', filename='images/' + item.img) }}"
+        alt="{{ item.name }}"
+      >
+    {% endif %}
+
+    <h3>{{ item.name }}</h3>
+
+    {% if item.desc %}
+      <p>{{ item.desc }}</p>
+    {% endif %}
+
+    <p><b>Ingredients:</b> {{ item.ingredients | join(", ") }}</p>
+
+    <p>
+      {% if item.vegan %}<span class="badge">Vegan</span>{% endif %}
+      {% if item.low_calorie %}<span class="badge">Low Calorie</span>{% endif %}
+      {% if item.sugar_free %}<span class="badge">Sugar Free</span>{% endif %}
+    </p>
+
+    {% if item.price is not none %}
+      <div class="price">{{ item.price }} TL</div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
