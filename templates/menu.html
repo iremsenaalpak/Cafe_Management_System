@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="menu-header">
+    <h2>Menümüz</h2>
+    
+    <div class="menu-filters">
+        <button class="filter-btn active" data-filter="all">Tümü</button>
+        <button class="filter-btn" data-filter="kahve">Kahveler</button>
+        <button class="filter-btn" data-filter="tatli">Tatlılar</button>
+        <button class="filter-btn" data-filter="sicak">Sıcak İçecekler</button>
+    </div>
+</div>
+
+<div class="menu-grid">
+    {% for item in items %}
+        <div class="menu-card" data-category="{{ item.category }}">
+            
+            <img src="{{ url_for('static', filename='images/' + item.img) }}" alt="{{ item.name }}">
+            
+            <div class="card-info">
+                <h3>{{ item.name }}</h3>
+                
+                <p>{{ item.desc }}</p>
+                
+                <span class="price">{{ item.price }} TL</span>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
