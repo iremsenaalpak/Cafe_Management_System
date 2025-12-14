@@ -1,110 +1,24 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-<section class="hero-retro2">
-  <div class="retro2-card">
-
-    <div class="retro2-machine">
-        </div>
-
-    <div class="retro2-content">
-        <p class="small-text-top">NO MORNING ROUTINE IS COMPLETE WITHOUT</p>
-        
-        <h1 class="main-title-retro">
-            (COFFEE)
-        </h1>
-        
-        <h2 class="main-title-sub-hub">
-            HUB
-        </h2>
-
-        <div class="retro2-cta">
-          <a href="/menu" class="btn">MENÜYÜ GÖR</a>
-        </div>
-        
-        <p class="footer-description">
-            ESPRESSO BREWED FROM WHOLE BEANS SOURCED FRESH HAWAII • STEAMED ORGANIC WHOLE MILK FROM GRAES FOD CHIWR • NEXT MONIRBEAM CRAFTED FROM OAT MILK • A TOUCH OF MADAGASCAR VANILLA TYPE • A DASH OF CEYLON CINNAMON • DARK CHOCOLATE SHAVINGS FROM CUANDIGIAN CACAO • A HINT OF HMALAYAN PINK SALT
-        </p>
-        
-        <p class="welcome-sub2">AI destekli önerilerimizle kahveni seç.</p>
+<div class="hero-wrapper">
+    
+    <div class="hero-side-img left-img">
+        <img src="{{ url_for('static', filename='images/barista.png') }}" alt="Barista">
     </div>
 
-  </div>
-</section>
+    <div class="hero-center-text">
+        <img src="{{ url_for('static', filename='images/heart.png') }}" alt="Love" class="heart-icon">
+        
+        <h1>Caffe HUB</h1>
+        <p>Best coffee in town with our new AI-powered recommendations!</p>
+        
+        <a href="/menu" class="btn-primary">See the Menu</a>
+    </div>
 
-<style>
-.retro2-content {
-    padding: 30px 20px 50px; 
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    line-height: 1.2; 
-}
+    <div class="hero-side-img right-img">
+        <img src="{{ url_for('static', filename='images/shop.png') }}" alt="Shop">
+    </div>
 
-/* Üstteki küçük metin */
-.small-text-top {
-    font-size: 0.85rem;
-    letter-spacing: 2.5px; 
-    text-transform: uppercase;
-    margin: 15px 0 25px; 
-    font-weight: 500;
-}
-
-/* Ana Başlık (COFFEE) */
-.main-title-retro {
-    font-family: 'Arial Black', Impact, sans-serif;
-    font-size: 10vw; 
-    font-weight: 900;
-    line-height: 0.7; 
-    margin: 0;
-    letter-spacing: -3px; 
-    color: #283839; 
-    text-transform: uppercase;
-    white-space: nowrap; 
-}
-
-/* HUB Başlığı (Nizamlı) */
-.main-title-sub-hub {
-    font-family: 'Helvetica Neue', sans-serif; 
-    font-weight: 700;
-    font-size: 3vw; 
-    line-height: 1;
-    margin: 30px 0 60px; 
-    color: #283839;
-    text-transform: uppercase;
-    letter-spacing: 12px; 
-}
-
-/* CTA Butonunun Altındaki Küçük Açıklama Metni */
-.footer-description {
-    font-size: 0.7rem;
-    letter-spacing: 0.5px;
-    line-height: 1.6; 
-    max-width: 550px; 
-    margin: 50px auto 15px; 
-    color: #555;
-    text-align: center;
-    text-transform: uppercase;
-}
-.welcome-sub2 {
-    margin-top: 15px; 
-    margin-bottom: 0;
-    font-size: 0.9rem;
-    color: #777;
-}
-
-/* Responsive Font Ayarları */
-@media (max-width: 768px) {
-    .main-title-retro { font-size: 15vw; }
-    .main-title-sub-hub { font-size: 6vw; margin: 25px 0 40px; letter-spacing: 6px; } 
-    .footer-description { max-width: 90%; }
-}
-@media (max-width: 480px) {
-    .main-title-retro { font-size: 20vw; } 
-    .main-title-sub-hub { font-size: 9vw; margin: 20px 0 35px; letter-spacing: 4px; }
-    .retro2-machine { height: 30vh; }
-}
-</style>
+</div>
 {% endblock %}
