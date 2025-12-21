@@ -19,3 +19,8 @@ Thumbs.db
 # Logs
 *.log
 
+.DS_Store
+__pycache__/
+*.pyc
+cafe.db
+backend/cafe.db
