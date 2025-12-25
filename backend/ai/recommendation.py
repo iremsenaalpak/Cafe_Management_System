@@ -1,41 +1,111 @@
-﻿from ai.menu import MENU
+﻿import re
 
-def get_recommendation(intent: dict):
+def _to_ai_category(db_category: str) -> str:
+    # DB categories: "Coffee", "Tea", "Cold Drinks", "Desserts"
+    c = (db_category or "").strip().lower()
+    if c == "coffee":
+        return "coffee"
+    if c == "tea":
+        return "tea"
+    if c in ["cold drinks", "cold", "cold drink"]:
+        return "cold"
+    if c in ["desserts", "dessert", "sweet"]:
+        return "sweet"
+    return "sweet"
+
+def _norm(s: str) -> str:
+    return (s or "").strip().lower()
+
+def _tokenize_text_fields(p: dict) -> set[str]:
+    """
+    Build a token set from:
+    - labels (primary)
+    - product name + description (fallback)
+    This helps filtering even when labels are missing.
+    """
+    tokens = set()
+
+    # labels
+    for x in (p.get("labels") or []):
+        tokens.add(_norm(str(x)))
+
+    name = _norm(p.get("name", ""))
+    desc = _norm(p.get("description", ""))
+
+    full = f"{name} {desc}".strip()
+    if full:
+        # word tokens (simple)
+        for w in re.findall(r"[a-z0-9]+", full):
+            tokens.add(w)
+        # keep full text too for phrase checks
+        tokens.add(full)
+
+    return tokens
+
+def _has_phrase(tokens: set[str], phrase: str) -> bool:
+    """
+    True if phrase exists in tokens.
+    - single word: direct match
+    - multi-word: all words present
+    """
+    phrase = _norm(phrase)
+    if not phrase:
+        return False
+
+    if phrase in tokens:
+        return True
+
+    parts = phrase.split()
+    if len(parts) == 1:
+        return parts[0] in tokens
+
+    return all(p in tokens for p in parts)
+
+def get_recommendation(intent: dict, products: list[dict]):
     results = {"coffee": [], "tea": [], "cold": [], "sweet": []}
     selected_categories = intent.get("categories") or ["coffee", "tea", "cold", "sweet"]
 
-    for category in selected_categories:
-        items = MENU.get(category, {})
-        for item_name, props in items.items():
-            ingredients = props.get("ingredients", [])
-            ok = True
+    # Exclude/include label lists
+    excl = set(_norm(x) for x in intent.get("exclude_labels", []) if str(x).strip())
+    incl = set(_norm(x) for x in intent.get("include_labels", []) if str(x).strip())
 
-            # Exclude (allergy / -siz / no X)
-            for bad in intent.get("exclude_ingredients", []):
-                if bad in ingredients:
-                    ok = False
+    for p in products:
+        ai_cat = _to_ai_category(p.get("category"))
+        if ai_cat not in selected_categories:
+            continue
+
+        tokens = _tokenize_text_fields(p)
+
+        # Exclude: if any excluded term matches labels OR appears in name/description tokens
+        if excl:
+            blocked = False
+            for bad in excl:
+                if bad in tokens or _has_phrase(tokens, bad):
+                    blocked = True
                     break
+            if blocked:
+                continue
 
-            # Include (with X / -li)
-            include_list = intent.get("include_ingredients", [])
-            if ok and include_list:
-                for good in include_list:
-                    if good not in ingredients:
-                        ok = False
-                        break
+        # Include: if include list exists, require at least one match (OR logic)
+        if incl:
+            ok = False
+            for good in incl:
+                if good in tokens or _has_phrase(tokens, good):
+                    ok = True
+                    break
+            if not ok:
+                continue
 
-            # Diet flags
-            if ok and intent.get("vegan", False) and not props.get("vegan", False):
-                ok = False
-            if ok and intent.get("low_calorie", False) and not props.get("low_calorie", False):
-                ok = False
-            if ok and intent.get("sugar_free", False):
-                has_sugar_flag = not props.get("sugar_free", False)
-                has_sugar_ingredient = "sugar" in ingredients
-                if has_sugar_flag or has_sugar_ingredient:
-                    ok = False
+        # Diet flags via tokens (labels preferred, fallback also works)
+        if intent.get("vegan") and not _has_phrase(tokens, "vegan"):
+            continue
+        if intent.get("low_calorie") and not _has_phrase(tokens, "low calorie"):
+            continue
+        if intent.get("sugar_free") and not _has_phrase(tokens, "sugar free"):
+            continue
 
-            if ok:
-                results[category].append(item_name)
+        results[ai_cat].append(p)
 
     return results
+
+
