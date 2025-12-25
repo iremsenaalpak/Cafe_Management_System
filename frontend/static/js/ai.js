@@ -5,11 +5,11 @@ async function recommend() {
 
   const msg = (input.value || "").trim();
   if (!msg) {
-    out.innerHTML = `<p style="margin:0;">Please type something (e.g. "recommend a diet drink").</p>`;
+    out.innerHTML = `<div class="ai-hint">Please type something (e.g. “vegan cold drink”, “no milk”, “fruit allergy”).</div>`;
     return;
   }
 
-  out.innerHTML = `<p style="margin:0;">Preparing recommendations...</p>`;
+  out.innerHTML = `<div class="ai-hint">Preparing recommendations...</div>`;
 
   try {
     const res = await fetch("/api/ai-suggest", {
@@ -21,21 +21,11 @@ async function recommend() {
     const data = await res.json();
 
     if (!res.ok) {
-      out.innerHTML = `<p style="margin:0;">Error: ${data.error || "Request failed"}</p>`;
+      out.innerHTML = `<div class="ai-hint">Error: ${data.error || "Request failed"}</div>`;
       return;
     }
 
-    const rec = data.recommendations || {};
     const groups = ["coffee", "tea", "cold", "sweet"];
-
-    let total = 0;
-    for (const g of groups) total += (rec[g]?.length || 0);
-
-    if (!total) {
-      out.innerHTML = `<p style="margin:0;">${data.info_message || "No matching items found."}</p>`;
-      return;
-    }
-
     const titleMap = {
       coffee: "Coffee",
       tea: "Tea",
@@ -43,43 +33,50 @@ async function recommend() {
       sweet: "Desserts"
     };
 
-    let html = "";
+    const rec = data.recommendations || {};
+    let total = 0;
+    for (const g of groups) total += (rec[g]?.length || 0);
 
+    if (!total) {
+      out.innerHTML = `<div class="ai-hint">${data.info_message || "No matching items found."}</div>`;
+      return;
+    }
+
+    let html = "";
     for (const g of groups) {
       const items = rec[g] || [];
       if (!items.length) continue;
 
       html += `<div class="ai-group">
-        <h4 class="ai-group-title">${titleMap[g] || g}</h4>
-        <div class="ai-cards">`;
+        <div class="ai-group-title">${titleMap[g] || g}</div>`;
 
       for (const it of items) {
-        const tags = [];
-        if (it.vegan) tags.push("Vegan");
-        if (it.low_calorie) tags.push("Low Calorie");
-        if (it.sugar_free) tags.push("Sugar Free");
-
+        const labels = it.labels || [];
         html += `
           <div class="ai-item">
-            ${it.img ? `<img class="ai-img" src="/static/images/${it.img}" alt="${it.name}">` : ""}
+            ${it.image ? `<img class="ai-img" src="${it.image}" alt="${it.name}">` : ""}
             <div class="ai-info">
               <div class="ai-top">
-                <strong class="ai-name">${it.name || "Recommendation"}</strong>
-                ${it.price ? `<span class="ai-price">${it.price} TL</span>` : ""}
+                <div class="ai-name">${it.name || "Recommendation"}</div>
+                ${it.price ? `<div class="ai-price">${Math.round(it.price)} TL</div>` : ""}
               </div>
-              ${it.desc ? `<div class="ai-desc">${it.desc}</div>` : ""}
-              ${tags.length ? `<div class="ai-tags">${tags.map(t => `<span class="ai-tag">${t}</span>`).join("")}</div>` : ""}
+
+              ${labels.length ? `
+                <div class="ai-tags">
+                  ${labels.map(l => `<span class="ai-tag">${l}</span>`).join("")}
+                </div>` : ""
+              }
             </div>
           </div>`;
       }
 
-      html += `</div></div>`;
+      html += `</div>`;
     }
 
     out.innerHTML = html;
 
   } catch (e) {
-    out.innerHTML = `<p style="margin:0;">Could not connect to the server.</p>`;
+    out.innerHTML = `<div class="ai-hint">Could not connect to the server.</div>`;
   }
 }
 

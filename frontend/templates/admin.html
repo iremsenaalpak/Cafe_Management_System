@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% set admin_key = request.args.get('key') %}
+
 <div class="admin-wrap">
   <h1 style="font-size: 44px; margin-bottom: 10px;">Admin Panel</h1>
 
@@ -10,7 +12,12 @@
     <section style="min-width:320px; flex:1;">
       <h2 style="font-size: 28px; margin-bottom: 8px;">Label Management</h2>
 
-      <form method="POST" action="{{ url_for('admin_add_label') }}" style="display:flex; gap:10px; align-items:center; margin-bottom:14px;">
+      <form method="POST"
+            action="{{ url_for('admin_add_label', key=admin_key) }}"
+            style="display:flex; gap:10px; align-items:center; margin-bottom:14px;">
+        <!-- key POST'ta da kalsın -->
+        <input type="hidden" name="key" value="{{ admin_key }}">
+
         <input
           type="text"
           name="label_name"
@@ -22,7 +29,10 @@
 
       <div style="display:flex; flex-wrap:wrap; gap:10px;">
         {% for l in labels %}
-          <form method="POST" action="{{ url_for('admin_delete_label', label_id=l['id']) }}" style="display:inline;">
+          <form method="POST"
+                action="{{ url_for('admin_delete_label', label_id=l['id'], key=admin_key) }}"
+                style="display:inline;">
+            <input type="hidden" name="key" value="{{ admin_key }}">
             <button type="submit" class="tag" style="cursor:pointer;">
               {{ l["name"] }} <span style="font-weight:800; margin-left:6px;">×</span>
             </button>
@@ -35,7 +45,12 @@
     <section style="flex:2; min-width:520px;">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
         <h2 style="font-size: 28px; margin-bottom: 8px;">Products</h2>
-        <a class="btn-primary" href="{{ url_for('admin_new_product') }}" style="padding:10px 18px; border-radius:999px; text-decoration:none;">+ Add Product</a>
+
+        <a class="btn-primary"
+           href="{{ url_for('admin_new_product', key=admin_key) }}"
+           style="padding:10px 18px; border-radius:999px; text-decoration:none;">
+          + Add Product
+        </a>
       </div>
 
       <div style="margin-top:10px; overflow:auto;">
@@ -72,14 +87,16 @@
 
                 <td style="padding:12px 8px;">
                   <a class="btn-primary"
-                     href="{{ url_for('admin_edit_product', product_id=p['id']) }}"
+                     href="{{ url_for('admin_edit_product', product_id=p['id'], key=admin_key) }}"
                      style="padding:8px 14px; border-radius:999px; text-decoration:none;">
                      Edit
                   </a>
                 </td>
 
                 <td style="padding:12px 8px;">
-                  <form method="POST" action="{{ url_for('admin_delete_product', product_id=p['id']) }}">
+                  <form method="POST"
+                        action="{{ url_for('admin_delete_product', product_id=p['id'], key=admin_key) }}">
+                    <input type="hidden" name="key" value="{{ admin_key }}">
                     <button type="submit"
                             style="width:34px; height:34px; border-radius:999px; border:1px solid #ddd; cursor:pointer;">
                       ×
