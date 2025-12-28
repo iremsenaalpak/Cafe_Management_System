@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-wrapper">
+
+    <div class="hero-side-img left-img">
+        <img src="{{ url_for('static', filename='images/shop.png') }}" alt="Shop">
+    </div>
+
+    <div class="hero-center-text">
+        <img src="{{ url_for('static', filename='images/heart.png') }}" alt="Love" class="heart-icon">
+
+        <h1>Caffe HUB</h1>
+        <p>Best coffee in town with our new AI-powered recommendations!</p>
+
+        <a href="/menu" class="btn-primary">See the Menu</a>
+    </div>
+
+    <div class="hero-side-img right-img">
+        <img src="{{ url_for('static', filename='images/barista.png') }}" alt="Barista">
+    </div>
+
+</div>
+{% endblock %}

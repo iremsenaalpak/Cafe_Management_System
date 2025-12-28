@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="admin-wrap" style="max-width:900px;">
+  {% if mode == "edit" %}
+    <h1 style="font-size:44px; margin-bottom:16px;">Edit Product</h1>
+  {% else %}
+    <h1 style="font-size:44px; margin-bottom:16px;">New Product</h1>
+  {% endif %}
+
+  {% set admin_key = request.args.get('key') %}
+
+  {% if mode == "edit" %}
+    <form method="POST"
+          action="{{ url_for('admin_update_product', product_id=product['id'], key=admin_key) }}"
+          enctype="multipart/form-data">
+  {% else %}
+    <form method="POST"
+          action="{{ url_for('admin_create_product', key=admin_key) }}"
+          enctype="multipart/form-data">
+  {% endif %}
+
+    <input type="hidden" name="key" value="{{ admin_key }}">
+
+    <div style="display:flex; flex-direction:column; gap:18px;">
+
+      <div>
+        <label style="font-weight:700;">Product Name</label>
+        <input type="text" name="name"
+               value="{{ product['name'] if product else '' }}"
+               style="width:100%; padding:12px 14px; border-radius:12px; border:1px solid #ddd;"
+               required>
+      </div>
+
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:220px;">
+          <label style="font-weight:700;">Price</label>
+          <input type="number" step="0.1" name="price"
+                 value="{{ product['price'] if product else '' }}"
+                 style="width:100%; padding:12px 14px; border-radius:12px; border:1px solid #ddd;"
+                 required>
+        </div>
+
+        <div style="flex:1; min-width:220px;">
+          <label style="font-weight:700;">Category</label>
+          <select name="category"
+                  style="width:100%; padding:12px 14px; border-radius:12px; border:1px solid #ddd;"
+                  required>
+            {% for c in categories %}
+              {% if product and product["category"] == c %}
+                <option value="{{ c }}" selected>{{ c }}</option>
+              {% else %}
+                <option value="{{ c }}">{{ c }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label style="font-weight:700;">Description</label>
+        <textarea name="description" rows="4"
+                  style="width:100%; padding:12px 14px; border-radius:12px; border:1px solid #ddd;">{{ product['description'] if product else '' }}</textarea>
+      </div>
+
+      <div>
+        <label style="font-weight:700;">Image (choose a file)</label>
+        <input type="file" name="image_file" accept=".png,.jpg,.jpeg,.webp"
+               style="display:block; margin-top:8px;">
+        {% if product and product["image"] %}
+          <div style="margin-top:10px; color:#666; font-size:14px;">Current image:</div>
+          <img src="{{ product['image'] }}"
+               alt="current"
+               style="margin-top:8px; width:220px; height:140px; object-fit:cover; border-radius:14px; border:1px solid rgba(0,0,0,0.12);">
+        {% endif %}
+      </div>
+
+      <div>
+        <label style="font-weight:700; display:block; margin-bottom:10px;">Labels (checkboxes)</label>
+
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          {% for l in labels %}
+            <label class="tag" style="cursor:pointer;">
+              <input type="checkbox" name="labels" value="{{ l['name'] }}"
+                {% if product_labels and (l['name'] in product_labels) %}checked{% endif %}>
+              {{ l["name"] }}
+            </label>
+          {% endfor %}
+        </div>
+
+        {% if labels|length == 0 %}
+          <div style="margin-top:8px; color:#666;">No labels yet. Add labels from the Admin Panel.</div>
+        {% endif %}
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:6px;">
+        <button class="btn-primary" type="submit" style="padding:12px 22px; border-radius:999px;">
+          Save
+        </button>
+
+        <a href="{{ url_for('admin_panel', key=admin_key) }}"
+           style="padding:12px 18px; border-radius:999px; border:1px solid #ddd; text-decoration:none; color:#333;">
+          Cancel
+        </a>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+{% endblock %}
