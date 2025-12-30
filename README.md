@@ -19,7 +19,7 @@ A modern, full-stack cafe management website featuring a dynamic menu, an admin 
 -   **Notifications**: View and resolve customer messages sent via the Contact page.
 -   **Image Uploads**: Upload product images directly from the dashboard.
 
-### ☕ Dynamic Menu
+### Dynamic Menu
 -   **Real-time Updates**: Menu items fetched directly from the SQLite database.
 -   **Categorization**: Browsable categories (Coffee, Tea, Cold Beverages, Desserts).
 -   **Visuals**: Rich display with images, prices, and dietary labels.
@@ -33,7 +33,7 @@ A modern, full-stack cafe management website featuring a dynamic menu, an admin 
 
 ```
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 -   Python 3.8+
@@ -64,7 +64,6 @@ cd backend
 python app.py
 ```
 
-The application will start at `http://127.0.0.1:5000`.
 
 ##  Usage
 
