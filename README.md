@@ -72,4 +72,4 @@ python app.py
 -   **Admin Panel**: Access via `/admin?key=1234` (Default Key: `1234`).
 -   **Contact**: Send messages to the admin.
 -   **Host**: https://cafe-management-system-ong8.onrender.com
--   **Admin Panel Host: https://cafe-management-system-ong8.onrender.com/admin?key=1234
+-   **Admin Panel Host**: https://cafe-management-system-ong8.onrender.com/admin?key=1234
