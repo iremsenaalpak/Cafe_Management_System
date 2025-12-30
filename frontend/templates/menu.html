@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="menu-section">
+  <div class="menu-header">
+    <h2>Our Menu</h2>
+  </div>
+
+  <!-- Filters -->
+  <div class="menu-filters" id="menuFilters">
+    <button class="filter-btn active" data-cat="All">All</button>
+    <button class="filter-btn" data-cat="Coffee">Coffee</button>
+    <button class="filter-btn" data-cat="Tea">Tea</button>
+    <button class="filter-btn" data-cat="Cold Drinks">Cold Drinks</button>
+    <button class="filter-btn" data-cat="Desserts">Desserts</button>
+  </div>
+
+  <!-- Grid -->
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+
+
+
+
+<script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+{% endblock %}

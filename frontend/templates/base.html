@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caffe HUB</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <a href="/" class="logo">☕ Caffe HUB</a>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/menu">Menu</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% block hero %}{% endblock %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- CHATBOT START -->
+    {% block chatbot %}
+    <div class="chat-widget" id="chatWidget" style="display: none;">
+        <div class="chat-header">
+            <span>Caffe HUB Assistant</span>
+            <span class="chat-close" id="chatClose">×</span>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg bot">
+                <img src="{{ url_for('static', filename='images/robot.png') }}" alt="AI">
+                <div class="msg-txt">Hello! I am your Caffe HUB Assistant. How can I help today?</div>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Ask something..." />
+            <button id="chatSend">Send</button>
+        </div>
+    </div>
+
+    <div class="chat-toggle" id="chatToggle">
+        <img src="{{ url_for('static', filename='images/robot.png') }}" alt="AI">
+    </div>
+    {% endblock %}
+    <!-- CHATBOT END -->
+
+    <!-- COMPONENT: Global Product Modal -->
+    <div id="productModal" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+            <div class="modal-body">
+                <div class="modal-img-wrap">
+                    <img id="modalImg" src="" alt="Product" />
+                </div>
+                <div class="modal-info">
+                    <div class="modal-title-row">
+                        <h3 id="modalTitle"></h3>
+                    </div>
+                    <div class="modal-category" id="modalCategory"></div>
+                    <div class="modal-price" id="modalPrice"></div>
+                    <p class="modal-desc" id="modalDesc"></p>
+                    <div class="modal-tags" id="modalTags"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ai.js') }}"></script>
+</body>
+
+</html>

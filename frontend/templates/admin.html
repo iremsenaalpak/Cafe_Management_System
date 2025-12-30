@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block content %}
+{% set admin_key = admin_key or request.args.get('key') %}
+
+<style>
+    .admin-wrap {
+        max-width: 1550px;
+        margin: 30px auto;
+        padding: 0 20px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .admin-grid {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .admin-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        color: #2d433d;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 8px;
+    }
+
+    .notif-label {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 3px 8px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    .tag-badge {
+        background: #f8f9f8;
+        border: 1px solid #eee;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        text-align: left;
+        color: #999;
+        font-size: 12px;
+        padding: 8px;
+        border-bottom: 2px solid #fafafa;
+    }
+
+    td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #fafafa;
+        font-size: 13px;
+    }
+
+    .delete-btn {
+        color: #ff5e5e;
+        font-size: 18px;
+        font-weight: bold;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    /* Search Bar Style */
+    .search-box {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        outline: none;
+        font-size: 14px;
+    }
+</style>
+
+<div class="admin-wrap">
+    <h1 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #2d433d; margin-bottom: 25px;">Admin
+        Dashboard</h1>
+
+    <div class="admin-grid">
+        <div style="flex: 1;">
+            <section class="admin-card">
+                <h2 class="section-title">Labels</h2>
+                <form method="POST" action="{{ url_for('admin_add_label', key=admin_key) }}"
+                    style="display:flex; gap:8px; margin-bottom:15px;">
+                    <input type="text" name="label_name" placeholder="E.g. Vegan"
+                        style="flex:1; padding:8px; border-radius:8px; border:1px solid #ddd;" required>
+                    <button class="btn-primary" type="submit">Add</button>
+                </form>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    {% for l in labels %}
+                    <span class="tag-badge" style="display:inline-flex; align-items:center; gap:4px;">
+                        {{ l.name }}
+                        <form method="POST" action="{{ url_for('admin_delete_label', label_id=l.id, key=admin_key) }}"
+                            style="display:inline; margin:0; padding:0;">
+                            <button type="submit"
+                                style="background:none; border:none; cursor:pointer; color:#999; font-weight:bold; font-size:14px; line-height:1; padding:0;"
+                                onmouseover="this.style.color='#ff5e5e'" onmouseout="this.style.color='#999'">×</button>
+                        </form>
+                    </span>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+
+        <div style="flex: 2;">
+            <section class="admin-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                    <h2 class="section-title" style="margin:0; border:none;">Current Menu</h2>
+                    <a class="btn-primary" href="{{ url_for('admin_new_product', key=admin_key) }}">+ New Product</a>
+                </div>
+
+                <input type="text" id="productSearch" class="search-box" placeholder="Search by product name...">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        {% for p in products %}
+                        <tr>
+                            <td><strong>{{ p.name }}</strong></td>
+                            <td>{{ p.category }}</td>
+                            <td>{{ p.price }} TL</td>
+                            <td style="display: flex; gap: 12px; align-items: center;">
+                                <a href="{{ url_for('admin_edit_product', product_id=p.id, key=admin_key) }}"
+                                    style="color:#d4a373; font-weight:bold; text-decoration:none;">Edit</a>
+                                <form method="POST"
+                                    action="{{ url_for('admin_delete_product', product_id=p.id, key=admin_key) }}">
+                                    <button type="submit" class="delete-btn">×</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+        <div style="flex: 1.2;">
+            <section class="admin-card">
+                <h2 class="section-title">Notifications</h2>
+                {% for msg in notifications %}
+                <div
+                    style="border: 1px solid #f0f0f0; border-radius: 12px; padding: 12px; margin-bottom: 12px; position: relative;">
+                    <form method="POST"
+                        action="{{ url_for('admin_resolve_notification', msg_id=msg.id, key=admin_key) }}"
+                        style="position:absolute; right:12px; top:12px;">
+                        <button type="submit"
+                            style="background:none; border:none; cursor:pointer; color:#ff5e5e; font-size: 18px; font-weight: bold; line-height: 1;">×</button>
+                    </form>
+                    <div style="font-weight:bold; font-size:14px; margin-bottom: 2px;">{{ msg.full_name }}</div>
+                    <div style="font-size:12px; color:#888; margin-bottom: 6px;">{{ msg.email }}</div>
+                    <div class="notif-label">{{ msg.category }}</div>
+                    <p style="font-size:13px; color:#444; margin-top: 8px; line-height: 1.4;">"{{ msg.message }}"</p>
+                </div>
+                {% endfor %}
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Search Functionality
+    document.getElementById('productSearch').addEventListener('keyup', function () {
+        let searchValue = this.value.toLowerCase();
+        let tableRows = document.querySelectorAll('#productTableBody tr');
+
+        tableRows.forEach(row => {
+            let productName = row.querySelector('td strong').textContent.toLowerCase();
+            if (productName.includes(searchValue)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
+</script>
+{% block chatbot %}{% endblock %}
+{% endblock %}

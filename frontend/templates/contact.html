@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Playfair+Display:wght@600;700&display=swap');
+
+    /* Global Typography for the Contact Page */
+    .contact-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        font-family: 'Montserrat', sans-serif;
+        color: #333;
+    }
+
+    /* Elegant Serif Headlines */
+    .contact-page h1,
+    .contact-page h2,
+    .contact-page h3 {
+        font-family: 'Playfair Display', serif;
+        color: #2d433d;
+        letter-spacing: 0.5px;
+    }
+
+    /* Top Highlights Grid: Showcases unique selling points */
+    .contact-grid-top {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 60px;
+    }
+
+    .highlight-card {
+        background: #ffffff;
+        padding: 35px 25px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+        border-bottom: 3px solid transparent;
+    }
+
+    .highlight-card:hover {
+        transform: translateY(-8px);
+        border-bottom: 3px solid #2d433d;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Layout for Bottom Section (Info + Form) */
+    .contact-grid-bottom {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        background: #fff;
+        padding: 50px;
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Mobile Responsive Logic */
+    @media (max-width: 992px) {
+        .contact-grid-bottom {
+            grid-template-columns: 1fr;
+            padding: 30px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .contact-page {
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        .contact-grid-bottom {
+            padding: 20px;
+            gap: 30px;
+        }
+
+        .highlight-card {
+            padding: 20px;
+        }
+    }
+
+    /* Form UI Components */
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 15px;
+        border: 1px solid #e1e1e1;
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        background: #fcfcfc;
+    }
+
+    .contact-form button {
+        background: #2d433d;
+        color: white;
+        padding: 16px;
+        border: none;
+        border-radius: 10px;
+        width: 100%;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+</style>
+
+<div class="contact-page">
+    <div style="text-align: center; margin-bottom: 60px;">
+        <h1 style="font-size: 3rem;">Contact Us</h1>
+        <p style="font-size: 1.1rem; color: #777;">Your health and dietary choices are our priority.</p>
+    </div>
+
+    <div class="contact-grid-top">
+        <div class="highlight-card">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🌱</div>
+            <h3>Vegan & Plant Based</h3>
+            <p style="font-size: 0.9rem; color: #666;">Separate preparation zones for 100% vegan safety.</p>
+        </div>
+        <div class="highlight-card">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">⚠️</div>
+            <h3>Allergy Conscious</h3>
+            <p style="font-size: 0.9rem; color: #666;">Specific protocols for gluten and nut sensitivities.</p>
+        </div>
+        <div class="highlight-card">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🥗</div>
+            <h3>Diet Friendly</h3>
+            <p style="font-size: 0.9rem; color: #666;">Transparency with calorie and macro tracking data.</p>
+        </div>
+    </div>
+
+    <div class="contact-grid-bottom">
+        <div>
+            <h2>Find Us</h2>
+            <p>📍 <strong>Address:</strong> University Campus, Caffe HUB</p>
+            <p>📞 <strong>Phone:</strong> +90 212 555 55 55</p>
+            <p>✉️ <strong>Email:</strong> hello@caffehub.com</p>
+
+            <div style="background: #f4f6f5; padding: 25px; border-radius: 15px; margin-top: 40px;">
+                <h3 style="margin-top: 0;">🕒 Opening Hours</h3>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                    <span>Weekdays</span>
+                    <strong>08:00 - 22:00</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                    <span>Weekends</span>
+                    <strong>09:00 - 23:00</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <h2>Send a Notification</h2>
+            <form method="POST">
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <select name="category">
+                    <option value="allergy">Allergy Alert</option>
+                    <option value="dietary">Dietary Customization</option>
+                    <option value="general">General Feedback</option>
+                </select>
+                <textarea name="message" placeholder="Describe your dietary needs..." rows="5"></textarea>
+                <button type="submit">SUBMIT NOTIFICATION</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% block chatbot %}{% endblock %}
+{% endblock %}
