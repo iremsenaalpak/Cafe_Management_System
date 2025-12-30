@@ -71,4 +71,5 @@ python app.py
 -   **Menu**: View products and chat with the AI Assistant (`Ask AI` button).
 -   **Admin Panel**: Access via `/admin?key=1234` (Default Key: `1234`).
 -   **Contact**: Send messages to the admin.
-
+-   **Host**: https://cafe-management-system-ong8.onrender.com
+-   **Admin Panel Host: https://cafe-management-system-ong8.onrender.com/admin?key=1234
