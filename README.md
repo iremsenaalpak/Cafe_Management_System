@@ -1,6 +1,6 @@
 # Cafe Management System (AI-Powered)
 
-Asude Doğan& İrem Sena Alpak
+Asude Doğan & İrem Sena Alpak
 
 A modern, full-stack cafe management website featuring a dynamic menu, an admin dashboard for product management, and a smart AI Assistant integrated with OpenAI's GPT-3.5 to provide personalized recommendations.
 
