@@ -168,6 +168,65 @@ nav a:hover {
   box-shadow: 0 12px 28px rgba(47, 79, 79, 0.22);
 }
 
+.mobile-hero-assets {
+  display: none; /* Hidden on desktop */
+}
+
+/* =========================================
+   MOBILE HOMEPAGE REDESIGN
+   (Only applies when width < 768px for phones)
+   ========================================= */
+@media screen and (max-width: 768px) {
+  .hero-wrapper {
+    background-image: none !important; /* Remove background image */
+    background-color: #FAFAF5; /* Ensure a clean background color */
+    flex-direction: column;
+    padding-top: 20px;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+
+  .mobile-hero-assets {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    padding: 0 10px;
+    margin-bottom: 10px;
+  }
+
+  .mobile-barista {
+    width: 120px; /* Adjust size as needed */
+    height: auto;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+  }
+
+  .mobile-heart {
+    width: 60px; /* Adjust size as needed */
+    height: auto;
+    animation: floatHeart 2s ease-in-out infinite;
+    align-self: flex-start; /* Move heart slightly up */
+    margin-top: 20px;
+  }
+
+  @keyframes floatHeart {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .hero-center-text h1 {
+    font-size: 3rem; /* Properly sized for mobile */
+    margin-bottom: 10px;
+  }
+  
+  .hero-center-text p {
+      font-size: 1rem;
+      padding: 0 20px;
+  }
+}
+
+
 .hero-robot-wrap {
   margin: 20px 0;
   cursor: pointer;

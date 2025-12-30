@@ -2,6 +2,12 @@
 
 {% block content %}
 <div class="hero-wrapper">
+    <!-- Mobile Only Assets -->
+    <div class="mobile-hero-assets">
+        <img src="{{ url_for('static', filename='images/barista.png') }}" class="mobile-barista" alt="Barista">
+        <img src="{{ url_for('static', filename='images/heart.png') }}" class="mobile-heart" alt="Love">
+    </div>
+
     <!-- CENTER -->
     <div class="hero-center-text">
         <h1>Caffe HUB</h1>
